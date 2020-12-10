@@ -1,15 +1,17 @@
 #!/usr/bin/env node
+
 var argv = require('minimist')(process.argv.slice(2));
 var fs = require("fs");
 var path = require("path");
 
+
 if ((argv.h || argv.help) || (!argv.file && !argv.folder) || !argv.old || !argv.new ) {
-    console.error("skillset-renamer [--file input_file.json] [--folder input_folder] --old const.js --new const_new.js");
+    console.error("skillset-renamer --file input_file.json  --old const.js --new const_new.js");
     process.exit(0);
 }
 
-const oldConst = reverseToValues(require(argv.old));
-const newConst = reverseToKeys(require(argv.new));
+const newConst = reverseToKeys(require(path.join(process.cwd(),argv.new)));
+const oldConst = reverseToValues(require(path.join(process.cwd(),argv.old)));
 
 const replacer = {};
 Object.keys(oldConst).forEach(key => {
