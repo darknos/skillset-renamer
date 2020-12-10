@@ -18,6 +18,7 @@ Object.keys(oldConst).forEach(key => {
     replacer[key] = newConst[oldConst[key]];
 });
 
+
 function reverseToValues(c) {
     const n = {};
     //reverse const.js
@@ -52,14 +53,29 @@ function processFile(file) {
         if (key == "ai.qubo") return;
         const value = replacer[key];        
         if (value) {
-            content = replaceAll(content, key, value);
+            if (content.indexOf(key) > -1) {
+                console.warn(key, " -> ", value);
+                content = replaceAll(content, key, value);
+            } else {
+                console.warn(`skip ${key}`);    
+            }
         } else {
             console.warn(`skip ${key}`);
         }
     });    
-    const value = replacer["ai.qubo"];
-    content = replaceAll(content, "ai.qubo", value);
-    return content;
+    const key = "ai.qubo";
+    const value = replacer[key];
+    if (value) {
+        if (content.indexOf(key) > -1) {
+            console.warn(key, " -> ", value);
+            content = replaceAll(content, key, value);
+        } else {
+            console.warn(`skip ${key}`);    
+        }
+    } else {
+        console.warn(`skip ${key}`);
+    }
+return content;
     
 }
 
