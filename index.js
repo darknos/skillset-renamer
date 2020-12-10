@@ -3,10 +3,12 @@
 var argv = require('minimist')(process.argv.slice(2));
 var fs = require("fs");
 var path = require("path");
-
+var glob = require("glob")
+ 
 
 if ((argv.h || argv.help) || (!argv.file && !argv.folder) || !argv.old || !argv.new ) {
     console.error("skillset-renamer --file input_file.json  --old const.js --new const_new.js");
+    console.error("skillset-renamer --folder sources/*.json --output ./results/  --old const.js --new const_new.js");
     process.exit(0);
 }
 
@@ -82,6 +84,17 @@ return content;
 
 if (argv.file) {
     console.log(processFile(argv.file));
+}
+
+if (argv.folder) {
+    // options is optional
+    var files = glob.sync(argv.folder, {cwd: process.cwd()});
+    for (let file of files) {
+        let content = processFile(file);
+        let fname = path.join(process.cwd(),argv.output, file);
+        console.log("Write new file: ", fname);
+        fs.writeFileSync(fname, content);
+    }
 }
 
 

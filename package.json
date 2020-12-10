@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "glob": "^7.1.6",
     "minimist": "^1.2.5"
   }
 }
